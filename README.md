@@ -93,7 +93,10 @@ A powerful web-based stock market prediction application that analyzes stock pri
 - **Technology**: AAPL, GOOGL, MSFT, TSLA, AMZN, META
 - **Finance**: JPM, BAC, WFC, GS
 - **Healthcare**: JNJ, PFE, UNH
+- **Indian Stocks**: RELIANCE, TCS, INFY, HDFCBANK, ICICIBANK, SBIN, ITC, HINDUNILVR, ASIANPAINT, MARUTI
 - **And many more!**
+
+> **Note**: Currently uses simulated data for demonstration. For real Indian stock prices, consider integrating with NSE/BSE APIs or services like Alpha Vantage, Yahoo Finance, or Indian financial data providers.
 
 ## 🔬 How It Works
 
@@ -174,6 +177,23 @@ const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol
 // Alternative free option
 const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
 ```
+
+#### Indian Stock Market APIs
+```javascript
+// For Indian stocks (NSE/BSE)
+const url = `https://www.nseindia.com/api/quote-equity?symbol=${symbol}`;
+
+// Alpha Vantage also supports Indian stocks
+const API_KEY = 'YOUR_API_KEY';
+const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}.BSE&apikey=${API_KEY}`;
+```
+
+#### Popular Indian Stock Symbols
+- **RELIANCE.NS** - Reliance Industries (NSE)
+- **TCS.NS** - Tata Consultancy Services (NSE)
+- **INFY.NS** - Infosys (NSE)
+- **HDFCBANK.NS** - HDFC Bank (NSE)
+- **ICICIBANK.NS** - ICICI Bank (NSE)
 
 ## 🤝 Contributing
 

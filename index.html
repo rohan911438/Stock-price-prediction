@@ -3,446 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Market Predictor</title>
+    <title>Stock Market Predictor | AI-Powered Financial Analysis</title>
+    <meta name="description" content="Advanced stock market prediction tool with interactive charts, moving averages, and AI-powered price forecasting">
+    <meta name="keywords" content="stock market, prediction, AI, machine learning, financial analysis, charts">
+    <meta name="author" content="Abhinav Kumar">
+    
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.0.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        h2 {
-            color: #555;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 5px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        input[type="text"] {
-            width: 200px;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        .chart-container {
-            width: 100%;
-            height: 400px;
-            margin: 20px 0;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-        
-        .error {
-            color: red;
-            padding: 10px;
-            background-color: #ffebee;
-            border-radius: 5px;
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .data-table th,
-        .data-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        
-        .data-table th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        
-        .data-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-    </style>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 </head>
 <body>
-    <div class="container">
-        <h1>Stock Market Predictor</h1>
-        
+    <!-- Header Section -->
+    <header class="container">
+        <h1>📈 Stock Market Predictor</h1>
+        <p style="text-align: center; color: #666; font-size: 1.1em; margin-bottom: 0;">
+            AI-powered stock analysis with interactive charts and predictive modeling
+        </p>
+    </header>
+
+    <!-- Input Section -->
+    <main class="container">
         <div class="input-group">
-            <label for="stockSymbol">Enter Stock Symbol:</label>
-            <input type="text" id="stockSymbol" value="GOOG" placeholder="e.g., AAPL, MSFT, TSLA">
-            <button onclick="fetchStockData()">Get Stock Data & Predict</button>
+            <div>
+                <label for="stockSymbol">Enter Stock Symbol:</label>
+                <input type="text" 
+                       id="stockSymbol" 
+                       value="GOOG" 
+                       placeholder="e.g., AAPL, MSFT, RELIANCE, TCS"
+                       autocomplete="off">
+            </div>
+            <button onclick="fetchStockData()" id="fetchButton">
+                🔍 Analyze Stock
+            </button>
         </div>
         
+        <!-- Status Messages -->
         <div id="loadingMessage" class="loading" style="display: none;">
-            Loading stock data and generating predictions...
+            <div class="loading-spinner"></div>
+            <p>Analyzing stock data and generating predictions...</p>
         </div>
         
         <div id="errorMessage" class="error" style="display: none;"></div>
-    </div>
+    </main>
 
-    <div class="container" id="stockDataContainer" style="display: none;">
-        <h2>Stock Data</h2>
+    <!-- Stock Data Section -->
+    <section class="container" id="stockDataContainer" style="display: none;">
+        <h2>📊 Recent Stock Data</h2>
         <div id="stockDataTable"></div>
-    </div>
+        <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+            <em>Note: Currently displaying simulated data for demonstration purposes</em>
+        </p>
+    </section>
 
-    <div class="container" id="chartsContainer" style="display: none;">
-        <h2>Price vs MA50</h2>
-        <div class="chart-container">
-            <canvas id="ma50Chart"></canvas>
+    <!-- Charts Section -->
+    <section class="container" id="chartsContainer" style="display: none;">
+        <!-- MA50 Chart -->
+        <div class="chart-section">
+            <h2>📈 Price vs 50-Day Moving Average</h2>
+            <p style="color: #666; margin-bottom: 15px;">
+                Short-term trend analysis comparing current price with 50-day moving average
+            </p>
+            <div class="chart-container">
+                <canvas id="ma50Chart"></canvas>
+            </div>
         </div>
 
-        <h2>Price vs MA50 vs MA100</h2>
-        <div class="chart-container">
-            <canvas id="ma100Chart"></canvas>
+        <!-- MA50 vs MA100 Chart -->
+        <div class="chart-section">
+            <h2>📊 Price vs MA50 vs MA100</h2>
+            <p style="color: #666; margin-bottom: 15px;">
+                Medium-term analysis comparing short-term (50-day) and medium-term (100-day) trends
+            </p>
+            <div class="chart-container">
+                <canvas id="ma100Chart"></canvas>
+            </div>
         </div>
 
-        <h2>Price vs MA100 vs MA200</h2>
-        <div class="chart-container">
-            <canvas id="ma200Chart"></canvas>
+        <!-- MA100 vs MA200 Chart -->
+        <div class="chart-section">
+            <h2>📉 Price vs MA100 vs MA200</h2>
+            <p style="color: #666; margin-bottom: 15px;">
+                Long-term trend analysis ideal for investment decision making
+            </p>
+            <div class="chart-container">
+                <canvas id="ma200Chart"></canvas>
+            </div>
         </div>
 
-        <h2>Original Price vs Predicted Price</h2>
-        <div class="chart-container">
-            <canvas id="predictionChart"></canvas>
+        <!-- Prediction Chart -->
+        <div class="chart-section">
+            <h2>🤖 AI Prediction vs Actual Prices</h2>
+            <p style="color: #666; margin-bottom: 15px;">
+                Machine learning-based price predictions vs actual historical data
+            </p>
+            <div class="chart-container">
+                <canvas id="predictionChart"></canvas>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        // Stock data storage
-        let stockData = [];
-        let predictions = [];
+    <!-- Footer Section -->
+    <footer class="container" style="text-align: center; color: #666; border-top: 1px solid #e0e0e0; padding-top: 20px;">
+        <p>
+            <strong>Stock Market Predictor</strong> | 
+            Built with ❤️ by <a href="https://github.com/rohan911438" target="_blank" style="color: #4CAF50;">Abhinav Kumar</a> |
+            <a href="https://github.com/rohan911438/Stock-price-prediction" target="_blank" style="color: #4CAF50;">View Source</a>
+        </p>
+        <p style="font-size: 0.9em; margin-top: 10px;">
+            <em>Disclaimer: This tool is for educational purposes only. Not financial advice.</em>
+        </p>
+    </footer>
 
-        // Function to fetch stock data from Alpha Vantage API
-        async function fetchStockData() {
-            const symbol = document.getElementById('stockSymbol').value.toUpperCase();
-            const loadingMessage = document.getElementById('loadingMessage');
-            const errorMessage = document.getElementById('errorMessage');
-            
-            if (!symbol) {
-                showError('Please enter a stock symbol');
-                return;
-            }
-
-            loadingMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-            
-            try {
-                // Using Alpha Vantage API (free tier)
-                const API_KEY = 'demo'; // Replace with your actual API key
-                const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${API_KEY}&outputsize=full`;
-                
-                // For demo purposes, we'll use mock data
-                const mockData = generateMockStockData(symbol);
-                
-                stockData = mockData;
-                
-                // Process data and create visualizations
-                processStockData();
-                createCharts();
-                generatePredictions();
-                
-                loadingMessage.style.display = 'none';
-                
-            } catch (error) {
-                console.error('Error fetching stock data:', error);
-                showError('Failed to fetch stock data. Please try again.');
-                loadingMessage.style.display = 'none';
-            }
-        }
-
-        // Generate mock stock data for demonstration
-        function generateMockStockData(symbol) {
-            const data = [];
-            const startDate = new Date('2012-01-01');
-            const endDate = new Date('2022-12-31');
-            let currentPrice = 100; // Starting price
-            
-            for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
-                // Skip weekends
-                if (date.getDay() === 0 || date.getDay() === 6) continue;
-                
-                // Generate realistic price movement
-                const change = (Math.random() - 0.5) * 0.1; // ±5% daily change
-                currentPrice = currentPrice * (1 + change);
-                
-                data.push({
-                    date: new Date(date),
-                    close: currentPrice,
-                    open: currentPrice * (1 + (Math.random() - 0.5) * 0.02),
-                    high: currentPrice * (1 + Math.random() * 0.03),
-                    low: currentPrice * (1 - Math.random() * 0.03),
-                    volume: Math.floor(Math.random() * 10000000) + 1000000
-                });
-            }
-            
-            return data;
-        }
-
-        // Process stock data and display table
-        function processStockData() {
-            const container = document.getElementById('stockDataContainer');
-            const tableContainer = document.getElementById('stockDataTable');
-            
-            // Show recent data (last 10 days)
-            const recentData = stockData.slice(-10);
-            
-            let tableHTML = '<table class="data-table"><thead><tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody>';
-            
-            recentData.forEach(row => {
-                tableHTML += `<tr>
-                    <td>${row.date.toLocaleDateString()}</td>
-                    <td>$${row.open.toFixed(2)}</td>
-                    <td>$${row.high.toFixed(2)}</td>
-                    <td>$${row.low.toFixed(2)}</td>
-                    <td>$${row.close.toFixed(2)}</td>
-                    <td>${row.volume.toLocaleString()}</td>
-                </tr>`;
-            });
-            
-            tableHTML += '</tbody></table>';
-            tableContainer.innerHTML = tableHTML;
-            container.style.display = 'block';
-        }
-
-        // Calculate moving averages
-        function calculateMA(data, period) {
-            const ma = [];
-            for (let i = 0; i < data.length; i++) {
-                if (i < period - 1) {
-                    ma.push(null);
-                } else {
-                    const sum = data.slice(i - period + 1, i + 1).reduce((a, b) => a + b.close, 0);
-                    ma.push(sum / period);
-                }
-            }
-            return ma;
-        }
-
-        // Create charts
-        function createCharts() {
-            const container = document.getElementById('chartsContainer');
-            container.style.display = 'block';
-            
-            const prices = stockData.map(d => d.close);
-            const dates = stockData.map(d => d.date.toLocaleDateString());
-            const ma50 = calculateMA(stockData, 50);
-            const ma100 = calculateMA(stockData, 100);
-            const ma200 = calculateMA(stockData, 200);
-            
-            // Chart 1: Price vs MA50
-            createChart('ma50Chart', {
-                labels: dates,
-                datasets: [
-                    {
-                        label: 'Price',
-                        data: prices,
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'MA50',
-                        data: ma50,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                        fill: false
-                    }
-                ]
-            });
-            
-            // Chart 2: Price vs MA50 vs MA100
-            createChart('ma100Chart', {
-                labels: dates,
-                datasets: [
-                    {
-                        label: 'Price',
-                        data: prices,
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'MA50',
-                        data: ma50,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'MA100',
-                        data: ma100,
-                        borderColor: 'blue',
-                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
-                        fill: false
-                    }
-                ]
-            });
-            
-            // Chart 3: Price vs MA100 vs MA200
-            createChart('ma200Chart', {
-                labels: dates,
-                datasets: [
-                    {
-                        label: 'Price',
-                        data: prices,
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'MA100',
-                        data: ma100,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'MA200',
-                        data: ma200,
-                        borderColor: 'blue',
-                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
-                        fill: false
-                    }
-                ]
-            });
-        }
-
-        // Generate predictions (mock neural network predictions)
-        function generatePredictions() {
-            const testData = stockData.slice(-300); // Last 300 days for prediction
-            const actualPrices = testData.map(d => d.close);
-            
-            // Mock prediction logic (in real scenario, you'd use the trained model)
-            const predictedPrices = actualPrices.map((price, index) => {
-                // Add some noise and trend to simulate predictions
-                const noise = (Math.random() - 0.5) * 0.05;
-                const trend = Math.sin(index * 0.1) * 0.02;
-                return price * (1 + noise + trend);
-            });
-            
-            predictions = predictedPrices;
-            
-            // Create prediction chart
-            const testDates = testData.map(d => d.date.toLocaleDateString());
-            createChart('predictionChart', {
-                labels: testDates,
-                datasets: [
-                    {
-                        label: 'Original Price',
-                        data: actualPrices,
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                        fill: false
-                    },
-                    {
-                        label: 'Predicted Price',
-                        data: predictedPrices,
-                        borderColor: 'green',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
-                        fill: false
-                    }
-                ]
-            });
-        }
-
-        // Helper function to create charts
-        function createChart(canvasId, data) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            
-            // Destroy existing chart if it exists
-            if (window[canvasId + 'Instance']) {
-                window[canvasId + 'Instance'].destroy();
-            }
-            
-            window[canvasId + 'Instance'] = new Chart(ctx, {
-                type: 'line',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Time'
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Price ($)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    }
-                }
-            });
-        }
-
-        // Show error message
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        // Initialize with default stock when page loads
-        window.onload = function() {
-            fetchStockData();
-        };
-    </script>
+    <!-- Custom JavaScript -->
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
