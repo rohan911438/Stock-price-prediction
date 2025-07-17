@@ -268,7 +268,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Abhinav Kumar** ([@rohan911438](https://github.com/rohan911438))
+**Rohan Kumar** ([@rohan911438](https://github.com/rohan911438))
 
 ## 📞 Support
 

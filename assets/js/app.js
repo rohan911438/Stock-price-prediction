@@ -1,6 +1,6 @@
 /**
  * Stock Market Predictor - Main JavaScript File
- * Author: Abhinav Kumar
+ * Author: Rohan Kumar
  * Description: Handles stock data fetching, processing, and visualization
  */
 
